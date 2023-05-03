@@ -67,40 +67,36 @@ class MainActivity : AppCompatActivity() {
         val User_Username = binding.EditTextUserName.text.toString()
         val id = databaseReference.push().key
 
-        if(  ( (User_Name.isEmpty() && User_SurName.isEmpty() )  &&  (User_Age.isEmpty() && User_Gender.isEmpty()) )  && User_Username.isEmpty()   )
-        {
-            Toast.makeText(applicationContext,"Please Enter The Whole Info",Toast.LENGTH_SHORT).show()
-        }else{
-            val data = MyDataModel(User_Name,User_SurName,User_Age,User_Gender,User_Username)
-
-            val UserRef = databaseReference.child(User_Username)
-                UserRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        Toast.makeText(applicationContext, "Username Already Exits", Toast.LENGTH_SHORT).show()
-                        binding.EditTextUserName.text.clear()
-                    } else{
-
-                        databaseReference.child(User_Username).setValue(data).addOnSuccessListener {
-                            binding.EditTextName.text.clear()
-                            binding.EditTextSurName.text.clear()
-                            binding.EditTextAge.text.clear()
-                            binding.EditTextGender.text.clear()
-                            binding.EditTextUserName.text.clear()
-
-                            Toast.makeText(applicationContext, "Data Saved Successfully", Toast.LENGTH_SHORT).show()
-                        }.addOnFailureListener {
-                            Toast.makeText(applicationContext, "Failed To Save Data", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                    override fun onCancelled(error: DatabaseError) {}
-            })
-
-
-
-
-            }
+//        if(  ( (User_Name.isEmpty() && User_SurName.isEmpty() )  &&  (User_Age.isEmpty() && User_Gender.isEmpty()) )  && User_Username.isEmpty()   )
+//        {
+//            Toast.makeText(applicationContext,"Please Enter The Whole Info",Toast.LENGTH_SHORT).show()
+//        }else{
+//            val data = MyDataModel(User_Name,User_SurName,User_Age,User_Gender,User_Username)
+//
+//            val UserRef = databaseReference.child(User_Username)
+//                UserRef.addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    if (snapshot.exists()) {
+//                        Toast.makeText(applicationContext, "Username Already Exits", Toast.LENGTH_SHORT).show()
+//                        binding.EditTextUserName.text.clear()
+//                    } else{
+//
+//                        databaseReference.child(User_Username).setValue(data).addOnSuccessListener {
+//                            binding.EditTextName.text.clear()
+//                            binding.EditTextSurName.text.clear()
+//                            binding.EditTextAge.text.clear()
+//                            binding.EditTextGender.text.clear()
+//                            binding.EditTextUserName.text.clear()
+//
+//                            Toast.makeText(applicationContext, "Data Saved Successfully", Toast.LENGTH_SHORT).show()
+//                        }.addOnFailureListener {
+//                            Toast.makeText(applicationContext, "Failed To Save Data", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
+//                    override fun onCancelled(error: DatabaseError) {}
+//            })
+//            }
 
     }
 }
