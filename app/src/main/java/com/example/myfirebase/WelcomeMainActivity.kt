@@ -21,7 +21,7 @@ class WelcomeMainActivity : AppCompatActivity() {
         val name = intent.getStringExtra("name")
         val email = intent.getStringExtra("email")
 
-        binding.DisplayName.text = name
+        //binding.DisplayName.text = name
         binding.Email.text = email
 
 

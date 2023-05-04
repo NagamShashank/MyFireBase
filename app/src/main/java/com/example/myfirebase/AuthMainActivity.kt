@@ -4,6 +4,11 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,15 +29,113 @@ class AuthMainActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding : ActivityAuthMainBinding
-//    var checkEmail = false
-//    val checkPassword = false
+    var checkEmail = false
+    var checkPassword = false
+    var password = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       // binding.SignInBtn.isEnabled = false
+       binding.signUpButton.isEnabled = false
+
+        binding.SignInText.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this,AuthMainActivity2::class.java)
+            startActivity(intent)
+        })
+
+
+        binding.PasswordToggle.setOnClickListener(View.OnClickListener {
+            if(password == true){
+                binding.PasswordEdittext.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.PasswordToggle.setBackgroundResource(R.drawable.password_invisible)
+                password = false
+            }else{
+                binding.PasswordEdittext.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.PasswordToggle.setBackgroundResource(R.drawable.password_visible)
+                password = true
+            }
+        })
+
+        binding.EmailIDEdittext.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val email_String = s.toString()
+                if(email_String.isEmpty()){
+                    binding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    binding.EmailErrorText.text = "Email Cannot Be Empty"
+                    checkEmail = false
+                }else if (!Patterns.EMAIL_ADDRESS.matcher(email_String).matches()){
+                    binding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    binding.EmailErrorText.text = "Invalid Email-ID"
+                    checkEmail = false
+                }else{
+                    binding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_edittext)
+                    binding.EmailErrorText.text = null
+                    checkEmail = true
+                }
+
+                binding.signUpButton.isEnabled = (checkEmail)&&(checkPassword)
+            }
+        })
+
+        binding.PasswordEdittext.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val user_Password = s.toString()
+                if(user_Password.isEmpty()){
+                    binding.PasswordErrorText.text = "Password Cannot be Empty"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else if(!user_Password.matches(".*[a-z].*".toRegex())){
+                    binding.PasswordErrorText.text = "Atleast one Lowercase is required"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else if(!user_Password.matches(".*[A-Z].*".toRegex())){
+                    binding.PasswordErrorText.text = "Atleast one Uppercase is required"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else if(!user_Password.matches(".*[0-9].*".toRegex())){
+                    binding.PasswordErrorText.text = "Atleast one Number is required"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else if(!user_Password.matches(".*[!@#$%&*_].*".toRegex())){
+                    binding.PasswordErrorText.text = "Atleast one Special Character is required"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else if (user_Password.length < 8){
+                    binding.PasswordErrorText.text = "Password Length too small"
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
+                    checkPassword = false
+                }else{
+                    binding.PasswordErrorText.text = null
+                    binding.layoutPasswordEdittext.setBackgroundResource(R.drawable.border_line_edittext)
+                    checkPassword = true
+                }
+
+
+                    binding.signUpButton.isEnabled = (checkEmail)&&(checkPassword)
+
+            }
+        })
+
+        binding.signUpButton.setOnClickListener(View.OnClickListener {
+//            val intent = Intent(this,WelcomeMainActivity::class.java)
+//            startActivity(intent)
+            Toast.makeText(applicationContext,"Validation Checked Successfully",Toast.LENGTH_SHORT).show()
+
+
+
+
+
+        })
+
+
 
         auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -46,43 +149,9 @@ class AuthMainActivity : AppCompatActivity() {
             signInGoogle()
         })
 
-
-//        authbinding.EmailIDEdittext.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                val email_String = s.toString()
-//                if(email_String.isEmpty()){
-//                    authbinding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
-//                    authbinding.EmailErrorText.text = "Email Cannot Be Empty"
-//                    checkEmail = false
-//                }else if (!Patterns.EMAIL_ADDRESS.matcher(email_String).matches()){
-//                    authbinding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
-//                    authbinding.EmailErrorText.text = "Invalid Email-ID"
-//                    checkEmail = false
-//                }else{
-//                    authbinding.layoutEmailEdittext.setBackgroundResource(R.drawable.border_line_error_edittext)
-//                    authbinding.EmailErrorText.text = null
-//                    checkEmail = true
-//                }
-//
-//                authbinding.SignInBtn.isEnabled = checkEmail == true
-//            }
-//        })
-
-//        authbinding.SignInBtn.setOnClickListener(View.OnClickListener {
-//            val intent = Intent(this,WelcomeMainActivity::class.java)
-//            startActivity(intent)
-//        })
-
     }
 
     // Email And Password Authentication
-
-
-
-
 
 
 
@@ -97,8 +166,6 @@ class AuthMainActivity : AppCompatActivity() {
         }
         super.onStart()
     }
-
-
 
 
     // Google Authentication....

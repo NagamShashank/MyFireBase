@@ -15,8 +15,14 @@
         android:theme="@style/Theme.MyFireBase"
         tools:targetApi="31">
         <activity
-            android:name=".AuthenticationMainActivity"
+            android:name=".AuthMainActivity2"
             android:exported="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
@@ -26,11 +32,7 @@
             android:name=".AuthMainActivity"
             android:exported="true">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
