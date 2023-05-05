@@ -63,7 +63,7 @@
                 android:digits="QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%*_-+1234567890"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:maxLength="8"
+                android:maxLength="15"
                 android:textColor="@color/white"
                 android:textColorHint="@color/Light_white"
                 android:textSize="20sp"
@@ -87,6 +87,16 @@
             android:layout_marginVertical="5dp"
             android:textColor="@color/Red800"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/UserForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="Forgot Password ?"
+            android:layout_gravity="end"/>
 
         <Button
             android:id="@+id/signIn_Button"

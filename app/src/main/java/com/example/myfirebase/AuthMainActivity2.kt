@@ -27,21 +27,21 @@ class AuthMainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Authbinding = ActivityAuthMain2Binding.inflate(layoutInflater)
         setContentView(Authbinding.root)
-
         myAuth = FirebaseAuth.getInstance()
+
+        Authbinding.signInButton.isEnabled = false
+
 
         Authbinding.SignUpText.setOnClickListener(View.OnClickListener {
             val intent = Intent(this,AuthMainActivity::class.java)
             startActivity(intent)
         })
 
-        Authbinding.signInButton.setOnClickListener(View.OnClickListener {
-            Toast.makeText(applicationContext,"Validation Checked Successfully", Toast.LENGTH_SHORT).show()
-        })
+
 
 
         Authbinding.PasswordAuthToggle.setOnClickListener(View.OnClickListener {
-            if(passwordTogglecheck == true){
+            if(passwordTogglecheck){
                 Authbinding.PasswordAuthEdittext.transformationMethod = PasswordTransformationMethod.getInstance()
                 Authbinding.PasswordAuthToggle.setBackgroundResource(R.drawable.password_invisible)
                 passwordTogglecheck = false
@@ -116,9 +116,32 @@ class AuthMainActivity2 : AppCompatActivity() {
             }
         })
 
+        Authbinding.signInButton.setOnClickListener(View.OnClickListener {
 
+            val SignInEmail = Authbinding.EmailAuthEdittext.text.toString()
+            val SignInPassword = Authbinding.PasswordAuthEdittext.text.toString()
 
+            myAuth.signInWithEmailAndPassword(SignInEmail,SignInPassword).addOnCompleteListener(this){
+                task->
+                if(task.isSuccessful){
+                    Toast.makeText(applicationContext,"SignIn Successfully", Toast.LENGTH_SHORT).show()
+                    val SignInIntent = Intent(this,WelcomeMainActivity::class.java)
+                    SignInIntent.putExtra("name","XYZ")
+                    SignInIntent.putExtra("email",SignInEmail)
+                    startActivity(SignInIntent)
+                    finish()
+                }else{
+                    Toast.makeText(applicationContext,"Failed To SignIn", Toast.LENGTH_SHORT).show()
+                }
+            }
 
+        })
+
+        Authbinding.UserForgotPassword.setOnClickListener(View.OnClickListener {
+            val forgotIntent = Intent(this,ForgotPasswordMainActivity::class.java)
+            startActivity(forgotIntent)
+
+        })
     }
 
     override fun onStart() {

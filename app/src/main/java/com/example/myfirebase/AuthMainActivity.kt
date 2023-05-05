@@ -33,12 +33,16 @@ class AuthMainActivity : AppCompatActivity() {
     var checkPassword = false
     var password = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = FirebaseAuth.getInstance()
 
-       binding.signUpButton.isEnabled = false
+
+
+        binding.signUpButton.isEnabled = false
 
         binding.SignInText.setOnClickListener(View.OnClickListener {
             val intent = Intent(this,AuthMainActivity2::class.java)
@@ -47,7 +51,7 @@ class AuthMainActivity : AppCompatActivity() {
 
 
         binding.PasswordToggle.setOnClickListener(View.OnClickListener {
-            if(password == true){
+            if(password){
                 binding.PasswordEdittext.transformationMethod = PasswordTransformationMethod.getInstance()
                 binding.PasswordToggle.setBackgroundResource(R.drawable.password_invisible)
                 password = false
@@ -127,17 +131,31 @@ class AuthMainActivity : AppCompatActivity() {
         binding.signUpButton.setOnClickListener(View.OnClickListener {
 //            val intent = Intent(this,WelcomeMainActivity::class.java)
 //            startActivity(intent)
-            Toast.makeText(applicationContext,"Validation Checked Successfully",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext,"Validation Checked Successfully",Toast.LENGTH_SHORT).show()
 
+            val User_Email = binding.EmailIDEdittext.text.toString()
+            val User_Password = binding.PasswordEdittext.text.toString()
 
-
-
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(User_Email,User_Password)
+                .addOnCompleteListener(this){task ->
+                    if(task.isSuccessful){
+                        Toast.makeText(applicationContext,"Sign Up Successfully",Toast.LENGTH_SHORT).show()
+                        val SignUpIntent = Intent(this,WelcomeMainActivity::class.java)
+                        SignUpIntent.putExtra("name","XYZ")
+                        SignUpIntent.putExtra("email",User_Email)
+                        startActivity(SignUpIntent)
+                        finish()
+                    }else{
+                        Toast.makeText(applicationContext,"Failed To Sign Up ",Toast.LENGTH_SHORT).show()
+                    }
+                }
 
         })
 
 
 
-        auth = FirebaseAuth.getInstance()
+
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -161,6 +179,7 @@ class AuthMainActivity : AppCompatActivity() {
             val intentUser = Intent(this,WelcomeMainActivity::class.java)
             intentUser.putExtra("name",currentUser.displayName)
             intentUser.putExtra("email",currentUser.email)
+            //intentUser.putExtra("password",currentUser.uid)
             startActivity(intentUser)
             finish()
         }

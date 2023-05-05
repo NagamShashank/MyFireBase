@@ -15,25 +15,23 @@
         android:theme="@style/Theme.MyFireBase"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPasswordMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".AuthMainActivity2"
-            android:exported="true" >
-
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".WelcomeMainActivity"
             android:exported="true" />
         <activity
             android:name=".AuthMainActivity"
-            android:exported="true">
-
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="false" />
