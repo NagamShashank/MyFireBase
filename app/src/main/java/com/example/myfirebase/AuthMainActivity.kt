@@ -136,7 +136,7 @@ class AuthMainActivity : AppCompatActivity() {
             val User_Email = binding.EmailIDEdittext.text.toString()
             val User_Password = binding.PasswordEdittext.text.toString()
 
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(User_Email,User_Password)
+            auth.createUserWithEmailAndPassword(User_Email,User_Password)
                 .addOnCompleteListener(this){task ->
                     if(task.isSuccessful){
                         Toast.makeText(applicationContext,"Sign Up Successfully",Toast.LENGTH_SHORT).show()

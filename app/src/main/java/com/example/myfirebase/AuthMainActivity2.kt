@@ -138,7 +138,9 @@ class AuthMainActivity2 : AppCompatActivity() {
         })
 
         Authbinding.UserForgotPassword.setOnClickListener(View.OnClickListener {
+            val forgotEmail = Authbinding.EmailAuthEdittext.text.toString()
             val forgotIntent = Intent(this,ForgotPasswordMainActivity::class.java)
+            forgotIntent.putExtra("forgotEmail",forgotEmail)
             startActivity(forgotIntent)
 
         })
